@@ -4,8 +4,7 @@ public class HelloMessage {
 
     private String name;
 
-    public HelloMessage() {
-    }
+    public HelloMessage() {}
 
     public String getName() {
         return name;
