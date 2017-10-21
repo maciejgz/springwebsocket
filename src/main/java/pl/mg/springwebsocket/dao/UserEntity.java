@@ -11,7 +11,6 @@ import javax.persistence.Table;
 @Table(name = "user")
 public class UserEntity {
 
-
     @Id
     @Column(name = "id")
     private String id;
@@ -24,6 +23,19 @@ public class UserEntity {
 
     @Column(name = "registration_date")
     private Date registrationDate;
+
+
+    public UserEntity() {
+        super();
+    }
+
+    public UserEntity(String id, String name, String city, Date registrationDate) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.city = city;
+        this.registrationDate = registrationDate;
+    }
 
     public String getId() {
         return id;
@@ -55,6 +67,11 @@ public class UserEntity {
 
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity [id=" + id + ", name=" + name + ", city=" + city + ", registrationDate=" + registrationDate + "]";
     }
 
 }
