@@ -11,6 +11,17 @@
       <java.version>1.8</java.version>
    </properties>
 
+   <description>
+      Projekt zbudowany na spring boot zawiera:
+      + websocket pod mechanizm push - bez podziału na userów, ale z mechanizmem push grupowym (bez obsługi logowania)
+      + testy JPA na Hibernate na single node
+      - testy JPA w środowisku klastrowym
+      - synchronizacja 
+      - cache w środowisku rozproszonym w oparciu o hazelcast 
+      
+      WNIOSKI:
+      - KONIECZNIE TRZEBA zrobić sychronizowane metody serwisowe
+   </description>
 
    <parent>
       <groupId>org.springframework.boot</groupId>
@@ -19,12 +30,10 @@
    </parent>
 
    <dependencies>
-
       <dependency>
          <groupId>org.springframework.boot</groupId>
          <artifactId>spring-boot-starter-web</artifactId>
       </dependency>
-
 
       <dependency>
          <groupId>org.springframework.boot</groupId>
@@ -61,6 +70,7 @@
          <artifactId>bootstrap</artifactId>
          <version>3.3.7</version>
       </dependency>
+      
       <dependency>
          <groupId>org.webjars</groupId>
          <artifactId>jquery</artifactId>
@@ -89,7 +99,6 @@
          <artifactId>h2</artifactId>
          <scope>test</scope>
       </dependency>
-
    </dependencies>
    <build>
       <finalName>spring-websocket</finalName>
