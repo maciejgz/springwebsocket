@@ -16,11 +16,12 @@
       + websocket pod mechanizm push - bez podziału na userów, ale z mechanizmem push grupowym (bez obsługi logowania)
       + testy JPA na Hibernate na single node
       - testy JPA w środowisku klastrowym
-      - synchronizacja 
+      - synchronizacja lokalna metod serwisowych - nie wystarczy synchronizować metod na poziomie transakcji JPA
       - cache w środowisku rozproszonym w oparciu o hazelcast 
       
       WNIOSKI:
       - KONIECZNIE TRZEBA zrobić sychronizowane metody serwisowe
+      - do testów: spring cloud
    </description>
 
    <parent>
@@ -30,6 +31,7 @@
    </parent>
 
    <dependencies>
+      <!-- spring boot -->
       <dependency>
          <groupId>org.springframework.boot</groupId>
          <artifactId>spring-boot-starter-web</artifactId>
@@ -50,7 +52,10 @@
          <artifactId>spring-boot-devtools</artifactId>
          <optional>true</optional>
       </dependency>
+      <!-- spring boot end -->
 
+
+      <!-- web websockets -->
       <dependency>
          <groupId>org.webjars</groupId>
          <artifactId>webjars-locator</artifactId>
@@ -70,13 +75,15 @@
          <artifactId>bootstrap</artifactId>
          <version>3.3.7</version>
       </dependency>
-      
+
       <dependency>
          <groupId>org.webjars</groupId>
          <artifactId>jquery</artifactId>
          <version>3.1.0</version>
       </dependency>
-
+      <!-- web websockets end -->
+      
+      <!-- Tests -->
       <dependency>
          <groupId>org.springframework.boot</groupId>
          <artifactId>spring-boot-starter-test</artifactId>
@@ -90,15 +97,28 @@
       </dependency>
 
       <dependency>
-         <groupId>mysql</groupId>
-         <artifactId>mysql-connector-java</artifactId>
-      </dependency>
-
-      <dependency>
          <groupId>com.h2database</groupId>
          <artifactId>h2</artifactId>
          <scope>test</scope>
       </dependency>
+      <!-- Tests end -->
+
+      <dependency>
+         <groupId>mysql</groupId>
+         <artifactId>mysql-connector-java</artifactId>
+      </dependency>
+      
+      <!-- hazelcast - distributed app -->
+      <dependency>
+         <groupId>com.hazelcast</groupId>
+         <artifactId>hazelcast</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.hazelcast</groupId>
+         <artifactId>hazelcast-client</artifactId>
+      </dependency>
+      <!-- hazelcast - distributed app end -->
+
    </dependencies>
    <build>
       <finalName>spring-websocket</finalName>

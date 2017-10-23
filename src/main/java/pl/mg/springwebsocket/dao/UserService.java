@@ -2,6 +2,8 @@ package pl.mg.springwebsocket.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -10,9 +12,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
-    @Transactional()
-    public synchronized UserEntity updateUserCity(String userId, String city) {
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+    public UserEntity updateUserCity(String userId, String city) {
         System.out.println("update user: " + userId + " city " + city);
         UserEntity userEntity = userRepository.getById(userId);
         userEntity.setCity(city);

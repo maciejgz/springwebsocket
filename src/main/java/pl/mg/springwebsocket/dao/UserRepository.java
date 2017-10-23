@@ -8,7 +8,6 @@ import javax.persistence.Query;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import pl.mg.springwebsocket.Profiles;
 
@@ -41,7 +40,6 @@ public class UserRepository {
         return user;
     }
 
-    @Transactional
     public UserEntity updateUser(UserEntity userEntity) {
         // TODO check how to check if user already exists
         UserEntity merge = em.merge(userEntity);
@@ -49,14 +47,12 @@ public class UserRepository {
 
     }
 
-    @Transactional
     public UserEntity addUser(UserEntity userEntity) {
         em.persist(userEntity);
         return userEntity;
 
     }
 
-    @Transactional
     @Profile(Profiles.TEST)
     public boolean removeAll() {
         Query query = em.createNativeQuery("DELETE FROM User");
