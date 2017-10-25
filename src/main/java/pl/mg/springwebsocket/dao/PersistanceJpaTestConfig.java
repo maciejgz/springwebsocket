@@ -2,6 +2,7 @@ package pl.mg.springwebsocket.dao;
 
 import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,12 @@ import pl.mg.springwebsocket.Profiles;
 @EnableTransactionManagement
 public class PersistanceJpaTestConfig {
 
-    @Autowired
+    @Resource
     @Qualifier("testH2DataSource")
     private DataSource dataSource;
 
-    @Autowired
+    @Resource
+    @Qualifier("testEntityManagerFactory")
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
     @Bean(name = "testH2DataSource")
@@ -41,7 +43,7 @@ public class PersistanceJpaTestConfig {
         return dataSource;
     }
     
-    @Bean
+    @Bean(name = "testEntityManagerFactory")
     @Profile(Profiles.TEST)
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();

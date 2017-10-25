@@ -1,11 +1,14 @@
 package pl.mg.springwebsocket.dao;
 
+import net.sf.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -19,7 +22,15 @@ public class UserController {
 
     @GetMapping("/getUsers")
     public ResponseEntity getAllUsers() {
-        return ResponseEntity.ok(userRepository.getAll());
+
+        List<UserEntity> users = userRepository.getAll();
+
+        UserEntity byId = userRepository.getById("1");
+
+        int size = CacheManager.ALL_CACHE_MANAGERS.get(0)
+                .getCache("pl.mg.springwebsocket.dao.UserEntity").getSize();
+        System.out.println("cache size:" + size);
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/getUserById/{id}")

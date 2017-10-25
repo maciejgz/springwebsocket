@@ -2,9 +2,11 @@ package pl.mg.springwebsocket.dao;
 
 import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +26,7 @@ public class PersistanceJpaConfig {
     @Autowired
     private DataSource dataSource;
 
-    @Autowired
+    @Resource
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
     @Bean
@@ -57,7 +59,8 @@ public class PersistanceJpaConfig {
         Properties additionalProperties = new Properties();
         additionalProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         additionalProperties.put("hibernate.show_sql", "true");
-        additionalProperties.put("hibernate.hbm2ddl.auto", "update");
+        additionalProperties.put("hibernate.cache.provider_class","org.hibernate.cache.EhCacheProvider" );
+        additionalProperties.put("hibernate.cache.region.factory_class","org.hibernate.cache.ehcache.EhCacheRegionFactory" );
         entityManagerFactory.setJpaProperties(additionalProperties);
 
         return entityManagerFactory;

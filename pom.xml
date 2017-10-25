@@ -109,15 +109,21 @@
       </dependency>
       
       <!-- hazelcast - distributed app -->
-      <dependency>
+     <!-- <dependency>
          <groupId>com.hazelcast</groupId>
          <artifactId>hazelcast</artifactId>
       </dependency>
       <dependency>
          <groupId>com.hazelcast</groupId>
          <artifactId>hazelcast-client</artifactId>
-      </dependency>
+      </dependency> -->
       <!-- hazelcast - distributed app end -->
+
+      <!-- hibernate 2nd level cache -->
+      <dependency>
+         <groupId>org.hibernate</groupId>
+         <artifactId>hibernate-ehcache</artifactId>
+      </dependency>
 
    </dependencies>
    <build>
