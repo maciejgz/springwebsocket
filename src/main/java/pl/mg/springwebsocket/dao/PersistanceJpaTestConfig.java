@@ -3,12 +3,8 @@ package pl.mg.springwebsocket.dao;
 import java.util.Properties;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +27,7 @@ public class PersistanceJpaTestConfig {
     public static final String TEST_PERSISTANCE_UNIT_NAME = "test_pu";
 
     @Resource(name = "testH2DataSource")
-    private DataSource dataSource;
+    private DataSource testH2DataSource;
 
 
     @Bean(name = "testH2DataSource")
@@ -48,7 +44,7 @@ public class PersistanceJpaTestConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 
-        entityManagerFactory.setDataSource(dataSource);
+        entityManagerFactory.setDataSource(testH2DataSource);
         entityManagerFactory.setPersistenceUnitName(TEST_PERSISTANCE_UNIT_NAME);
 
         // Classpath scanning of @Component, @Service, etc annotated class

@@ -12,7 +12,6 @@ import java.util.List;
 @Transactional
 public class UserRepositoryImpl implements UserRepository {
 
-
     @Resource
     private EntityManager em;
 
@@ -20,7 +19,6 @@ public class UserRepositoryImpl implements UserRepository {
     public List<UserEntity> getAll() {
         return em.createQuery("from UserEntity").getResultList();
     }
-
 
     @Override
     public UserEntity getByIdWithDetach(String id) {
@@ -46,7 +44,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public UserEntity addUser(UserEntity userEntity) {
-        em.persist(userEntity);
+        em.merge(userEntity);
         return userEntity;
     }
 
