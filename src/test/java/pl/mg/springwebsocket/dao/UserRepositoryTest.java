@@ -17,11 +17,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import pl.mg.springwebsocket.Profiles;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceJpaTestConfig.class})
-@ActiveProfiles(value = {Profiles.TEST})
+@ActiveProfiles(Profiles.TEST)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
 public class UserRepositoryTest {
 
@@ -68,6 +69,7 @@ public class UserRepositoryTest {
     @Test
     public void testDoubleAccessWithDetachedObject() {
         // getUser with detach
+        userRepository.addUser(new UserEntity("1", "mac", "waw", new Date()));
         UserEntity firstUser = userRepository.getByIdWithDetach("1");
         assertTrue(firstUser != null);
         assertEquals("mac", firstUser.getName());
@@ -96,7 +98,7 @@ public class UserRepositoryTest {
     
     
     /**
-     * Double access wthout detaching object -takie samo zachowanie
+     * Double access without detaching object - takie samo zachowanie
      */
     @Test
     public void testDoubleAccessWithoutDetaching() {

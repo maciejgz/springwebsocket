@@ -1,63 +1,25 @@
 package pl.mg.springwebsocket.dao;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Repository;
-
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pl.mg.springwebsocket.Profiles;
 
-@Repository
-public class UserRepository {
+import java.util.List;
 
-    @PersistenceContext
-    private EntityManager em;
+public interface UserRepository {
+    List<UserEntity> getAll();
 
-    public List<UserEntity> getAll() {
-        return em.createQuery("from UserEntity").getResultList();
-    }
+    UserEntity getByIdWithDetach(String id);
 
-    /**
-     * with detach
-     * 
-     * @param name
-     * @return
-     */
-    public UserEntity getByIdWithDetach(String id) {
-        UserEntity user = em.find(UserEntity.class, id);
-        if (user != null) {
-            em.detach(user);
-        }
-        return user;
-    }
+    UserEntity getById(String id);
 
-    public UserEntity getById(String id) {
-        UserEntity user = em.find(UserEntity.class, id);
-        return user;
-    }
+    UserEntity updateUser(UserEntity userEntity);
 
-    public UserEntity updateUser(UserEntity userEntity) {
-        // TODO check how to check if user already exists
-        UserEntity merge = em.merge(userEntity);
-        return merge;
-
-    }
-
-    public UserEntity addUser(UserEntity userEntity) {
-        em.persist(userEntity);
-        return userEntity;
-
-    }
+    UserEntity addUser(UserEntity userEntity);
 
     @Profile(Profiles.TEST)
-    public boolean removeAll() {
-        Query query = em.createNativeQuery("DELETE FROM User");
-        query.executeUpdate();
-        return true;
-
-    }
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    boolean removeAll();
 }

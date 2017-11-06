@@ -3,6 +3,8 @@ package pl.mg.springwebsocket.dao;
 import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +28,11 @@ import pl.mg.springwebsocket.Profiles;
 @EnableTransactionManagement
 public class PersistanceJpaTestConfig {
 
-    @Resource
-    @Qualifier("testH2DataSource")
+    public static final String TEST_PERSISTANCE_UNIT_NAME = "test_pu";
+
+    @Resource(name = "testH2DataSource")
     private DataSource dataSource;
 
-    @Resource
-    @Qualifier("testEntityManagerFactory")
-    private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
     @Bean(name = "testH2DataSource")
     @Profile(Profiles.TEST)
@@ -49,6 +49,7 @@ public class PersistanceJpaTestConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 
         entityManagerFactory.setDataSource(dataSource);
+        entityManagerFactory.setPersistenceUnitName(TEST_PERSISTANCE_UNIT_NAME);
 
         // Classpath scanning of @Component, @Service, etc annotated class
         entityManagerFactory.setPackagesToScan("pl.mg.springwebsocket");
@@ -62,8 +63,9 @@ public class PersistanceJpaTestConfig {
         additionalProperties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         additionalProperties.put("hibernate.show_sql", "true");
         additionalProperties.put("hibernate.hbm2ddl.auto", "create");
+        additionalProperties.put("hibernate.cache.provider_class","org.hibernate.cache.EhCacheProvider" );
+        additionalProperties.put("hibernate.cache.region.factory_class","org.hibernate.cache.ehcache.EhCacheRegionFactory" );
         entityManagerFactory.setJpaProperties(additionalProperties);
-
         return entityManagerFactory;
 
     }
@@ -72,7 +74,9 @@ public class PersistanceJpaTestConfig {
     @Profile(Profiles.TEST)
     public JpaTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        transactionManager.setPersistenceUnitName(TEST_PERSISTANCE_UNIT_NAME);
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
 

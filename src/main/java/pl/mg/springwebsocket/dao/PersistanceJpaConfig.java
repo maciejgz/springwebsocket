@@ -7,29 +7,27 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
+import org.springframework.core.PriorityOrdered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import pl.mg.springwebsocket.Profiles;
 
 @Configuration
 @ComponentScan(basePackages = "pl.mg")
 @EnableTransactionManagement
 public class PersistanceJpaConfig {
 
-    @Autowired
+    @Resource(name = "mysqlDataSource")
     private DataSource dataSource;
 
-    @Resource
-    private LocalContainerEntityManagerFactoryBean entityManagerFactory;
-
-    @Bean
+    @Bean(name = "mysqlDataSource")
     @Primary
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -40,7 +38,7 @@ public class PersistanceJpaConfig {
         return dataSource;
     }
 
-    @Bean
+    @Bean(name = "entityManagerFactory")
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
@@ -64,17 +62,18 @@ public class PersistanceJpaConfig {
         entityManagerFactory.setJpaProperties(additionalProperties);
 
         return entityManagerFactory;
-
     }
 
     @Bean
+    @Primary
     public JpaTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
 
     @Bean
+    @Primary
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }

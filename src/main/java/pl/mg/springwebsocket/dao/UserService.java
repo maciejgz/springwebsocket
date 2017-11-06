@@ -17,6 +17,7 @@ public class UserService {
         System.out.println("update user: " + userId + " city " + city);
         UserEntity userEntity = userRepository.getById(userId);
         userEntity.setCity(city);
+        System.out.println("test");
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {

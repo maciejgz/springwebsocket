@@ -1,12 +1,9 @@
 package pl.mg.springwebsocket.dao;
 
-import net.sf.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,9 +24,6 @@ public class UserController {
 
         UserEntity byId = userRepository.getById("1");
 
-        int size = CacheManager.ALL_CACHE_MANAGERS.get(0)
-                .getCache("pl.mg.springwebsocket.dao.UserEntity").getSize();
-        System.out.println("cache size:" + size);
         return ResponseEntity.ok(users);
     }
 
@@ -38,6 +32,13 @@ public class UserController {
         return ResponseEntity.ok(userRepository.getByIdWithDetach(id));
     }
 
+
+    @PostMapping("/addUser")
+    public ResponseEntity addUser(@RequestParam(name = "id") String id,@RequestParam(name = "city") String city, @RequestParam(name = "name") String name ) {
+        UserEntity userEntity = this.userRepository.addUser(new UserEntity(id, name, city, null));
+        return ResponseEntity.ok(userEntity);
+
+    }
 
     @GetMapping("/updateUserCity/{id}/{city}")
     public ResponseEntity updateUserCity(@PathVariable("id") String id, @PathVariable("city") String city) {
@@ -56,8 +57,6 @@ public class UserController {
      * test zachowania w środowisku klastrowym. scenariusz: 1. node-1: pobranie danych z detach. freeze na 10s 2. node-2: pobranie danych z detach.
      * update danych i zapis 3. node-1: update danych i zapis 4. node-1: odczyt danych
      */
-
-
     @GetMapping("/updateUserCitySlow/{id}/{city}")
     public ResponseEntity updateUserCitySlow(@PathVariable("id") String id, @PathVariable("city") String city) {
         UserEntity userEntity = userRepository.getByIdWithDetach(id);

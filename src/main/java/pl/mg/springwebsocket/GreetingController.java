@@ -13,6 +13,7 @@ public class GreetingController {
     @SendTo("/topic/greetings")
     public Greeting greeting(HelloMessage message) throws Exception {
         Thread.sleep(1000);
+        System.out.println("test");
         return new Greeting("Hello, " + message.getName() + "!");
     }
 }
