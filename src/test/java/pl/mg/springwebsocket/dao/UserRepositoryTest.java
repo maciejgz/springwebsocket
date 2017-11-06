@@ -126,6 +126,5 @@ public class UserRepositoryTest {
         // update user from first object
         UserEntity thirdUser = userRepository.getById("1");
         assertEquals("macccciej", thirdUser.getName());
-
     }
 }
