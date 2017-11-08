@@ -25,17 +25,17 @@ import javax.sql.DataSource;
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
-    private Environment env;
+    private TokenStore tokenStore;
 
     @Autowired
-    private TokenStore tokenStore;
+    private UserApprovalHandler userApprovalHandler;
 
     @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserApprovalHandler userApprovalHandler;
+    private Environment env;
 
     @javax.annotation.Resource(name = "mysqlDataSource")
     private DataSource mysqlDataSource;
@@ -66,9 +66,14 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Override
     public void configure(ClientDetailsServiceConfigurer clients)
             throws Exception {
-        clients.inMemory().withClient(CLIENT_ID).authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
-                .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT").scopes("read", "write", "trust").secret(OAUTH_SECRET)
-                .accessTokenValiditySeconds(accessTokenValidtityTime).refreshTokenValiditySeconds(refreshTokenValidtityTime);
+        clients.inMemory()
+                .withClient(CLIENT_ID)
+                .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
+                .authorities("ROLE_CLIENT", "ROLE_ADMIN")
+                .scopes("read", "write", "trust")
+                .secret(OAUTH_SECRET)
+                .accessTokenValiditySeconds(accessTokenValidtityTime)
+                .refreshTokenValiditySeconds(refreshTokenValidtityTime);
     }
 
     @Override

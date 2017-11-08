@@ -31,9 +31,9 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("john").password("123").roles("USER").and()
-                .withUser("admin").password("123").roles("ADMIN").and()
-                .withUser("client").password("123").roles("USER");
+                .withUser("john").password("123").roles("ROLE_CLIENT").and()
+                .withUser("admin").password("123").roles("ROLE_ADMIN").and()
+                .withUser("client").password("123").roles("ROLE_ADMIN");
     }
 
     @Override
@@ -45,9 +45,10 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                .csrf().disable().anonymous().disable()
+                .anonymous().disable()
                 .authorizeRequests().antMatchers("/oauth/token").permitAll()
                 .and()
                 .csrf().disable();
@@ -55,7 +56,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Autowired
-    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore){
+    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore) {
         TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
         handler.setTokenStore(tokenStore);
         handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
@@ -70,5 +71,4 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         store.setTokenStore(tokenStore);
         return store;
     }
-
 }

@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHand
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    private static final String RESOURCE_ID = "COS_API";
+    private static final String RESOURCE_ID = "springwebsocket_api";
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
@@ -26,9 +26,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         http
                 .anonymous().disable()
-                .authorizeRequests().antMatchers(HttpMethod.OPTIONS).permitAll()
+                .authorizeRequests().antMatchers("/push/**").authenticated()
                 .and()
-                .authorizeRequests().antMatchers("/**").authenticated()
+                .authorizeRequests().antMatchers("/user/**").authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
