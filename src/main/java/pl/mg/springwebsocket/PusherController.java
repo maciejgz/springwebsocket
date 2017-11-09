@@ -18,7 +18,7 @@ public class PusherController {
     private SimpMessagingTemplate template;
 
     @PostMapping("/")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> sendMessage(@RequestBody String message, Authentication authentication) {
         System.out.println("SendMessage fired: " + message);
         this.template.convertAndSend("/topic/greetings", new Greeting("pushMessage: " + message));
