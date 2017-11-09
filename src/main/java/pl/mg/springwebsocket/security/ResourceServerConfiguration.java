@@ -30,6 +30,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .and()
                 .authorizeRequests().antMatchers("/user/**").authenticated()
                 .and()
+                .authorizeRequests().antMatchers("/gs-guide-websocket/**").authenticated()
+                .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
 }
