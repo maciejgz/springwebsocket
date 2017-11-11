@@ -12,7 +12,8 @@ export class PushService implements OnInit {
 	 messageReceived$ = this.messageSource.asObservable();
 	stompClient: Client;
 
-  constructor() { 
+  constructor() {
+    //TODO add token retriving service
 	const socket = new SockJS('http://localhost:8080/gs-guide-websocket?access_token=dc178870-2c6b-43a2-ab8b-2f2586ca2e7d') as WebSocket;
 	    this.stompClient = stompjs.over(socket);
 		 this.stompClient.connect('', '', (frame: Frame) => {
