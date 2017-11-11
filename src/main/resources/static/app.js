@@ -14,7 +14,7 @@ function setConnected(connected) {
 
 function connect() {
     //TODO there should be access token added to the request
-    var socket = new SockJS('/gs-guide-websocket');
+    var socket = new SockJS('http://localhost:8080/gs-guide-websocket?access_token=dab11d2e-17fe-4e58-9a7b-2bdc31093fa1');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
