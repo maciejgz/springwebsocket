@@ -2,4 +2,12 @@
   {{title}}
 </h1>
 
+<label>username</label>
+<input type="text" id="apiUsername" #usernameInput />
+<br>
+<label>password</label>
+<input type="password" id="apiPassword" #passwordInput />
+<br>
+<button (click)="getToken()">Login into app</button>
+
 <p *ngFor="let message of messages">{{message}}</p>

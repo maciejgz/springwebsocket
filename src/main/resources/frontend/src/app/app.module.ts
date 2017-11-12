@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 import { PushService } from './service/push.service';
+import {Oauth2Service} from "./service/oauth2.service";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -11,9 +13,10 @@ import { PushService } from './service/push.service';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [PushService],
+  providers: [PushService, Oauth2Service],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

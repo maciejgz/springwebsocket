@@ -1,22 +1,21 @@
-import { Injectable, OnInit } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
+import * as stompjs from "stompjs";
 import {Client, Frame, Message} from "stompjs";
-
-import * as stompjs from 'stompjs';
 import * as SockJS from "sockjs-client";
 import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class PushService implements OnInit {
 
-	private messageSource = new Subject<string>();
-	 messageReceived$ = this.messageSource.asObservable();
-	stompClient: Client;
+  private messageSource = new Subject<string>();
+  messageReceived$ = this.messageSource.asObservable();
+  stompClient: Client;
 
   constructor() {
     //TODO add token retriving service
-	const socket = new SockJS('http://localhost:8080/gs-guide-websocket?access_token=dc178870-2c6b-43a2-ab8b-2f2586ca2e7d') as WebSocket;
-	    this.stompClient = stompjs.over(socket);
-		 this.stompClient.connect('', '', (frame: Frame) => {
+    const socket = new SockJS('http://localhost:8080/gs-guide-websocket?access_token=dc178870-2c6b-43a2-ab8b-2f2586ca2e7d') as WebSocket;
+    this.stompClient = stompjs.over(socket);
+    this.stompClient.connect('', '', (frame: Frame) => {
       console.log('CONNECT CONNECT');
       this.stompClient.subscribe('/topic/greetings', (message: Message) => {
         this.onMessage(message);
@@ -34,7 +33,6 @@ export class PushService implements OnInit {
   ngOnInit() {
 
   }
-
 
 
 }
