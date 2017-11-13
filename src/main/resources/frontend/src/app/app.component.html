@@ -2,12 +2,21 @@
   {{title}}
 </h1>
 
-<label>username</label>
-<input type="text" id="apiUsername" #usernameInput />
-<br>
-<label>password</label>
-<input type="password" id="apiPassword" #passwordInput />
-<br>
-<button (click)="getToken()">Login into app</button>
+<p *ngIf="!oauth2Service.authenticated">
+  <label>username</label>
+  <input type="text" id="apiUsername" #usernameInput/>
+  <br>
+  <label>password</label>
+  <input type="password" id="apiPassword" #passwordInput/>
+  <br>
+  <button (click)="getToken()">Login into app</button>
+</p>
 
+
+<p *ngIf="oauth2Service.authenticated && !pushService.connected">
+  <button (click)="connectToPushService()">Connect to push server</button>
+</p>
+
+<label *ngIf="oauth2Service.authenticated && pushService.connected">Connected to push service. waiting for
+  messagess...</label>
 <p *ngFor="let message of messages">{{message}}</p>

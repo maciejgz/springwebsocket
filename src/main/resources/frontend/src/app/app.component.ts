@@ -35,4 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.oauth2Service.getToken(this.usernameNameInput.nativeElement.value, this.passwordInput.nativeElement.value);
   }
 
+  connectToPushService() {
+    this.pushService.connectToPushServer();
+  }
+
 }

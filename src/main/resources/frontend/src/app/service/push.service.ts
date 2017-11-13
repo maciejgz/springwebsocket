@@ -3,6 +3,7 @@ import * as stompjs from "stompjs";
 import {Client, Frame, Message} from "stompjs";
 import * as SockJS from "sockjs-client";
 import {Subject} from "rxjs/Subject";
+import {Oauth2Service} from "./oauth2.service";
 
 @Injectable()
 export class PushService implements OnInit {
@@ -10,17 +11,10 @@ export class PushService implements OnInit {
   private messageSource = new Subject<string>();
   messageReceived$ = this.messageSource.asObservable();
   stompClient: Client;
+  private _connected : boolean = false;
 
-  constructor() {
-    //TODO add token retriving service
-    const socket = new SockJS('http://localhost:8080/gs-guide-websocket?access_token=dc178870-2c6b-43a2-ab8b-2f2586ca2e7d') as WebSocket;
-    this.stompClient = stompjs.over(socket);
-    this.stompClient.connect('', '', (frame: Frame) => {
-      console.log('CONNECT CONNECT');
-      this.stompClient.subscribe('/topic/greetings', (message: Message) => {
-        this.onMessage(message);
-      });
-    });
+  constructor(private oauthService : Oauth2Service ) {
+
   }
 
   private onMessage(message: Message) {
@@ -29,10 +23,25 @@ export class PushService implements OnInit {
     this.messageSource.next(json['content']);
   }
 
+  connectToPushServer() {
+    const socket = new SockJS('http://localhost:8080/gs-guide-websocket?access_token=' + this.oauthService.token) as WebSocket;
+    this.stompClient = stompjs.over(socket);
+    this.stompClient.connect('', '', (frame: Frame) => {
+      console.log('CONNECT CONNECT');
+      this.stompClient.subscribe('/topic/greetings', (message: Message) => {
+        this.onMessage(message);
+      });
+    });
+    this._connected=true;
+  }
+
 
   ngOnInit() {
 
   }
 
+  get connected(): boolean {
+    return this._connected;
+  }
 
 }
