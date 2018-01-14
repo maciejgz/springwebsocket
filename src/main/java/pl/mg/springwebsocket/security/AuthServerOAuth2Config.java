@@ -40,9 +40,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @javax.annotation.Resource(name = "mysqlDataSource")
     private DataSource mysqlDataSource;
 
-    @Value("classpath:schema.sql")
-    private Resource schemaScript;
-
 
     private static final String REALM = "COS2_REALM";
     private static final String CLIENT_ID = "COS2";
